@@ -7,6 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+Sistem Peminjaman Buku ini adalah aplikasi untuk peminjaman buku, bisa menghitung sesuai jumlah hari peminjaman, 
+disaat buku sedang di pinjam maka buku tersebut tidak bisa di pilih lagi ketika peminjaman, 
+kedepan nya akan ada rekap peminajman dan memperbaiki halaman dashboard dengan grafik peminjaman, 
+dan juga membuat fitur ketika peminjam terlambat mengembalikan buku akan ada hukuman (tidak bisa meminjam lagi),
+saat peminjam terkena hukuman, hanya petugas yang bisa membuka status hukuman nya tersebut
+
+
 
 Cara Untuk Install Sistem Peminjaman Mini
 
