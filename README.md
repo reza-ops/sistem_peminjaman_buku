@@ -77,3 +77,5 @@ Cara Untuk Install Sistem Peminjaman Mini
 4. php artisan key:generate
 5. php artisan migrate
 6. dan langsung start dengan php artisan serve
+7. masuk ke aplikasi
+8. ganti url ke /registrasi (next akan ada update)
