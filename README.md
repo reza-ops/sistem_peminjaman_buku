@@ -63,3 +63,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+
+
+
+Cara Untuk Install Sistem Peminjaman Mini
+
+1. pull dari baranch development
+2. composer update
+3. setting .env
+4. php artisan key:generate
+5. php artisan migrate
+6. dan langsung start dengan php artisan serve
