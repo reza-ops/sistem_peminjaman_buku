@@ -21,8 +21,13 @@ Cara Untuk Install Sistem Peminjaman Mini
 
 
 Contoh Aplikasi
+fitur peminjaman
 ![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
+pemberitahuan transaksi berhasil
 ![image](https://user-images.githubusercontent.com/52590303/139216608-ed668054-d550-4d02-9114-2563f314e534.png)
+fitur pengembalian
 ![image](https://user-images.githubusercontent.com/52590303/139216689-d2e1d217-8de1-4fff-93d4-13f9ddfcd301.png)
+pengaturan master
+![image](https://user-images.githubusercontent.com/52590303/139216959-ae6214e8-22a3-4e22-a9d5-7e2d9ceb1458.png)
 
 
