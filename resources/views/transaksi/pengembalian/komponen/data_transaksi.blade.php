@@ -17,9 +17,17 @@
     </div>
     <div class="form-group">
         <label for="nama"> Keterangan </label>
+        @if ($data->is_sudah_kembali == '0')
+        <textarea class="form-control" readonly> Transaksi Selesai</textarea>
+        @else
         <textarea class="form-control" readonly> {{ \Carbon\Carbon::parse($data->tanggal_kembali) < \Carbon\Carbon::now() ? 'Telat Mengembalikan Pengunjung Tidak Bisa Meminjam Sebelum Diupdate Oleh Admin' : '-' }}</textarea>
+        @endif
     </div>
-    <a class="btn btn-danger bg-back" href="{{ route($route.'selesai_transaksi', ['transaksi_id' => $data->id]) }}">Selesai Transaksi</a>
+    @if ($data->is_sudah_kembali == '0')
+        <a class="btn btn-warning bg-back" >Transaksi Sudah Diselesaikan</a>
+    @else
+        <a class="btn btn-danger bg-back" href="{{ route($route.'selesai_transaksi', ['transaksi_id' => $data->id]) }}">Selesai Transaksi</a>
+    @endif
 </div>
 <div class="col-md-6">
     <label for="nama"> Daftar Buku </label>
