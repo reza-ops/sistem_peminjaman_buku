@@ -28,7 +28,7 @@ Cara Untuk Install Sistem Peminjaman Mini
 9. masuk ke dashboard
 
 
-Contoh Aplikasi
+Contoh Aplikasi <br>
 login
 ![image](https://user-images.githubusercontent.com/52590303/139620683-73df69f2-c52c-4b6f-91ff-ab49b4ad7f8a.png)
 login error
