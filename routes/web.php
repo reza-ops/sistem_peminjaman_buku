@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Master\BukuController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\PengunjungController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Transaksi\PeminjamanController;
 use App\Http\Controllers\Transaksi\PengembalianController;
 use App\Models\Master\Pengunjung;
@@ -30,6 +31,8 @@ Route::post('logged_in', [LoginController::class, 'authenticate'])->name('logged
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::resource('profile', ProfileController::class);
 
 Route::group([
     'prefix'    => 'master',

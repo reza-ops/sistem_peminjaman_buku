@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Master\Kategori;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use PHPUnit\TextUI\Help;
 use Yajra\DataTables\DataTables;
 
 class KategoriController extends Controller
@@ -17,6 +19,7 @@ class KategoriController extends Controller
     private $header = 'Kategori';
 
     public function index(){
+        Helper::swal();
         $data = [
             'route' => $this->route,
             'title' => $this->title,
@@ -30,18 +33,9 @@ class KategoriController extends Controller
         $data_table =  DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('aksi', function ($query) {
-
-                /**cek role */
                 $aksi = '';
-                // if (Auth::user()->can('permission-update')) {
                     $aksi = "<a href=" . URL::to('master/kategori/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
-                // }
-
-                // if (Auth::user()->can('permission-delete')) {
                     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/kategori/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
-                    // $aksi .= "<form action='{{ route('projects.destroy', $query->id) }}' method='DELETE'>";
-                    // $aksi .= "</form>";
-                // }
                 return $aksi;
             })
             ->rawColumns(['aksi'])
@@ -51,6 +45,7 @@ class KategoriController extends Controller
     }
 
     public function create(){
+        Helper::swal();
         $data = [
             'route' => $this->route,
             'title' => $this->title,
@@ -66,7 +61,7 @@ class KategoriController extends Controller
         ];
 
         $alert = [
-            'required'  => 'The :attribute is required',
+            'required'  => ':ttribute harus diisi',
             'min'       => ':attribute Min :min Char'
         ];
         $validator = Validator::make($request->all(), $rules, $alert);
@@ -84,17 +79,19 @@ class KategoriController extends Controller
             if ($query) {
                 DB::commit();
                 $message = 'Berhasil';
-                return redirect(route($this->route.'index'));
+                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
             } else {
                 DB::rollback();
                 $message = 'Gagal';
-                return redirect()->back();
+                return redirect()->back()->with('error', Helper::parsing_alert($message));
             }
         }
-        return redirect()->back();
+        $message = Helper::parsing_alert($validator->errors()->all());
+        return redirect()->back()->with('error', Helper::parsing_alert($message));
     }
 
     public function edit($id){
+        Helper::swal();
         $kategori = Kategori::where('id', $id)->first();
         $data = [
             'route' => $this->route,
@@ -112,7 +109,7 @@ class KategoriController extends Controller
         ];
 
         $alert = [
-            'required'  => 'The :attribute is required',
+            'required'  => ':attribute harus diisi',
             'min'       => ':attribute Min :min Char'
         ];
         $validator = Validator::make($request->all(), $rules, $alert);
@@ -130,14 +127,15 @@ class KategoriController extends Controller
             if ($query) {
                 DB::commit();
                 $message = 'Berhasil';
-                return redirect(route($this->route.'index'));
+                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
             } else {
                 DB::rollback();
                 $message = 'Gagal';
-                return redirect()->back();
+                return redirect()->back()->with('error', Helper::parsing_alert($message));
             }
         }
-        return redirect()->back();
+        $message = Helper::parsing_alert($validator->errors()->all());
+        return redirect()->back()->with('error', Helper::parsing_alert($message));
     }
     public function destroy($data_id){
         $delete = Kategori::where('id', $data_id)->delete();

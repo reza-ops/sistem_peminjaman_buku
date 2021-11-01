@@ -10,6 +10,7 @@
     <meta name="author" content="">
 
     <title>{{ $title ?? 'Sistem Peminjaman' }}</title>
+    <link href="https://static.republika.co.id/uploads/images/inpicture_slide/membaca-buku-_160327175002-742.jpg" rel="icon" type="image/png">
 
     <!-- Custom fonts for this template-->
     {{-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> --}}

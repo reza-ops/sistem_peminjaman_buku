@@ -21,6 +21,7 @@ class BukuController extends Controller
 
 
     public function index(){
+        Helper::swal();
         $data = [
             'route' => $this->route,
             'title' => $this->title,
@@ -40,18 +41,9 @@ class BukuController extends Controller
                 return 'Rp, '.number_format($query->biaya_per_hari, 2);
             })
             ->addColumn('aksi', function ($query) {
-
-                /**cek role */
                 $aksi = '';
-                // if (Auth::user()->can('permission-update')) {
                     $aksi = "<a href=" . URL::to('master/buku/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
-                // }
-
-                // if (Auth::user()->can('permission-delete')) {
                     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/buku/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
-                    // $aksi .= "<form action='{{ route('projects.destroy', $query->id) }}' method='DELETE'>";
-                    // $aksi .= "</form>";
-                // }
                 return $aksi;
             })
             ->rawColumns(['aksi'])
@@ -61,6 +53,7 @@ class BukuController extends Controller
     }
 
     public function create(){
+        Helper::swal();
         $data = [
             'route' => $this->route,
             'title' => $this->title,
@@ -77,7 +70,7 @@ class BukuController extends Controller
         ];
 
         $alert = [
-            'required'  => 'The :attribute is required',
+            'required'  => ':attribute harus di isi',
             'min'       => ':attribute Min :min Char'
         ];
         $validator = Validator::make($request->all(), $rules, $alert);
@@ -96,17 +89,19 @@ class BukuController extends Controller
             if ($query) {
                 DB::commit();
                 $message = 'Berhasil';
-                return redirect(route($this->route.'index'));
+                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
             } else {
                 DB::rollback();
                 $message = 'Gagal';
-                return redirect()->back();
+                return redirect()->with('error', Helper::parsing_alert($message));
             }
         }
-        return redirect()->back();
+        $message = Helper::parsing_alert($validator->errors()->all());
+        return redirect()->back()->with('error', Helper::parsing_alert($message));
     }
 
     public function edit($id){
+        Helper::swal();
         $kategori = Buku::where('id', $id)->first();
         $data = [
             'route' => $this->route,
@@ -125,7 +120,7 @@ class BukuController extends Controller
         ];
 
         $alert = [
-            'required'  => 'The :attribute is required',
+            'required'  => ':attribute harus di isi',
             'min'       => ':attribute Min :min Char'
         ];
         $validator = Validator::make($request->all(), $rules, $alert);
@@ -138,14 +133,15 @@ class BukuController extends Controller
             if ($query) {
                 DB::commit();
                 $message = 'Berhasil';
-                return redirect(route($this->route.'index'));
+                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
             } else {
                 DB::rollback();
                 $message = 'Gagal';
-                return redirect()->back();
+                return redirect()->back()->with('error', Helper::parsing_alert($message));
             }
         }
-        return redirect()->back();
+        $message = Helper::parsing_alert($validator->errors()->all());
+        return redirect()->back()->with('error', Helper::parsing_alert($message));
     }
     public function destroy($data_id){
         $delete = Buku::where('id', $data_id)->delete();

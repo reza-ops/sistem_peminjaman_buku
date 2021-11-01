@@ -131,4 +131,19 @@ class Helper{
         return $string;
     }
 
+    public static function swal()
+    {
+        if (session('success')) {
+            alert()->html('', session('success'), 'success');
+        }
+
+        if (session('error')) {
+            alert()->html('', session('error'), 'error');
+        }
+
+        if (session('warning')) {
+            alert()->html('', session('warning'), 'warning');
+        }
+    }
+
 }
