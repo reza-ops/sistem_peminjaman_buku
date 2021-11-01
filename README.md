@@ -24,17 +24,21 @@ Cara Untuk Install Sistem Peminjaman Mini
 5. php artisan migrate
 6. dan langsung start dengan php artisan serve
 7. masuk ke aplikasi
-8. ganti url ke /registrasi (next akan ada update)
+8. register
+9. masuk ke dashboard
 
 
-Contoh Aplikasi
+Contoh Aplikasi <br>
+login
+![image](https://user-images.githubusercontent.com/52590303/139620683-73df69f2-c52c-4b6f-91ff-ab49b4ad7f8a.png)
+login error
+![image](https://user-images.githubusercontent.com/52590303/139620741-bc2a296f-c25e-41f3-af8d-4b68920d2b6d.png)
+register![image](https://user-images.githubusercontent.com/52590303/139620815-004ca30e-69eb-42f4-88e9-122faf1c5708.png)
 fitur peminjaman
 ![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
 pemberitahuan transaksi berhasil
 ![image](https://user-images.githubusercontent.com/52590303/139216608-ed668054-d550-4d02-9114-2563f314e534.png)
 fitur pengembalian
 ![image](https://user-images.githubusercontent.com/52590303/139216689-d2e1d217-8de1-4fff-93d4-13f9ddfcd301.png)
-pengaturan master
-![image](https://user-images.githubusercontent.com/52590303/139216959-ae6214e8-22a3-4e22-a9d5-7e2d9ceb1458.png)
 
 
