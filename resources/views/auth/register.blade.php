@@ -28,6 +28,7 @@
 
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
+                @include('sweetalert::alert')
                 <!-- Nested Row within Card Body -->
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
@@ -36,7 +37,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
-                            <form method="POST" action="{{ route('register') }}">
+                            <form method="POST" action="{{ route('regsitrasi_action') }}">
                                 @csrf
                                 <div class="form-group row">
                                     <div class="col-sm-12 mb-3 mb-sm-0">

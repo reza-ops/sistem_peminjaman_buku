@@ -27,6 +27,7 @@ Route::get('/', function () {
 });
 
 Route::post('logged_in', [LoginController::class, 'authenticate'])->name('logged_in');
+Route::post('regisrasi_action', [LoginController::class, 'registrasi'])->name('regsitrasi_action');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

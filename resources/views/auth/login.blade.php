@@ -30,6 +30,8 @@
 
             <div class="col-xl-10 col-lg-12 col-md-9">
                 @include('sweetalert::alert')
+                <?php
+                ?>
                 @if (session('error'))
                     <div class="mb-4 font-medium text-sm text-green-600">
                         {{-- {{ dd(alert()->html('', session('config'), 'config')); }} --}}
