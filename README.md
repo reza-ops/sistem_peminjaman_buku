@@ -33,8 +33,7 @@ login
 ![image](https://user-images.githubusercontent.com/52590303/139620683-73df69f2-c52c-4b6f-91ff-ab49b4ad7f8a.png)
 login error
 ![image](https://user-images.githubusercontent.com/52590303/139620741-bc2a296f-c25e-41f3-af8d-4b68920d2b6d.png)
-register
-![image](https://user-images.githubusercontent.com/52590303/139620696-3abf55c9-adf4-4081-93ee-8703e45b540e.png)
+register![image](https://user-images.githubusercontent.com/52590303/139620815-004ca30e-69eb-42f4-88e9-122faf1c5708.png)
 fitur peminjaman
 ![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
 pemberitahuan transaksi berhasil
