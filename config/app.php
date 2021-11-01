@@ -179,6 +179,8 @@ return [
 
         /**sweetalert */
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        // dom pdf
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -235,6 +237,8 @@ return [
 
         /**alert */
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        // dom pdf
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

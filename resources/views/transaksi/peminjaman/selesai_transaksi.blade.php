@@ -57,6 +57,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <a class="btn btn-info bg-back" href="{{ route($route.'index') }}">Kembali Ke Menu Peminjaman</a>
+                                        <br>
+                                        <br>
+                                        <a target="_blank" class="btn btn-warning bg-back" href="{{ URL::to('transaksi/peminjaman/cetak_struk', ['data_id' =>$data->id]) }}">Cetak Struk</a>
                                     </div>
                                 </div>
                             </div>

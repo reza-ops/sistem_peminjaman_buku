@@ -5,14 +5,9 @@
         <div class="card-header py-3">
             <div class="row align-items-center">
                 <div class="col">
-                    {{-- <h6 class="text-uppercase text-muted ls-1 mb-1">Master Data - Golongan Darah</h6> --}}
                     <h3 class="m-0 font-weight-bold text-dark">{{ $header }}</h3>
-                    {{-- <h2 class="mb-0">Dropping Darah</h2> --}}
                 </div>
                     <div class="col text-right">
-                        {{-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Excel</button> --}}
-                        {{-- <a href="{{ route($route. 'download_template_excel') }}" class="btn btn-success">Download Template Excel</a> --}}
-                        {{-- <a href="{{ route($route. 'create_multi_day') }}" class="btn btn-success">Input Multiple</a> --}}
                         <a href="{{ route($route. 'create') }}" class="btn btn-success">Tambah</a>
                     </div>
             </div>

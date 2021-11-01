@@ -49,6 +49,7 @@ Route::group([
     Route::resource('buku', BukuController::class)->except('destroy','show');
     Route::get('buku/hapus/{data_id}',[BukuController::class,'destroy']);
     Route::get('buku/get_data' ,[BukuController::class,'getData']);
+    Route::get('buku/cetak_barcode/{data_id}' ,[BukuController::class,'cetakBarcode']);
 
 
     // route pengunjung
@@ -71,6 +72,7 @@ Route::group([
         Route::post('search_kode_buku',[ PeminjamanController::class,'searchKodeBuku'])->name('search_kode_buku');
         Route::get('select_pengunjung',[ PeminjamanController::class,'selectPengujung'])->name('select_pengunjung');
         Route::get('get_detail_transaksi/{data_id}',[ PeminjamanController::class,'getDetailTransaksi'])->name('get_detail_transaksi');
+        Route::get('cetak_struk/{data_id}',[ PeminjamanController::class,'cetakStruk']);
     });
 
     Route::resource('pengembalian', PengembalianController::class)->only('index','store');

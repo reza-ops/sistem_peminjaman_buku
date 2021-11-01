@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\URL;
 use PHPUnit\TextUI\Help;
 use Validator;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class BukuController extends Controller
 {
@@ -44,6 +45,7 @@ class BukuController extends Controller
                 $aksi = '';
                     $aksi = "<a href=" . URL::to('master/buku/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
                     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/buku/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
+                    $aksi .= "<a target='_blank' href='" . URL::to('master/buku/cetak_barcode', ['data_id' =>$query->id]) . "' class='btn btn-info btn-sm'>Cetak Barcode</a>";
                 return $aksi;
             })
             ->rawColumns(['aksi'])
@@ -161,6 +163,18 @@ class BukuController extends Controller
                 'status'   => false,
             ];
             return response()->json($response);
+        }
+    }
+
+    public function cetakBarcode($data_id){
+        $cek_data = Buku::where('id', $data_id)->first();
+
+        if(!empty($cek_data)){
+            $pdf = PDF::loadview($this->route.'komponen.cetak_barcode',['buku'=>$cek_data]);
+            return $pdf->stream();
+        }else{
+            $message = 'Data Tidak Ditemukan';
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
     }
 }

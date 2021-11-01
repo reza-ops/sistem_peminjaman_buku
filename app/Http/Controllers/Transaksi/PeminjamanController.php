@@ -10,6 +10,7 @@ use App\Models\Transaksi\Peminjaman;
 use App\Models\Transaksi\PeminjamanItems;
 use Carbon\Carbon;
 use Validator;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -175,5 +176,17 @@ class PeminjamanController extends Controller
             'count_tanggal' =>  Carbon::parse($data_peminjaman['tanggal_pinjam'])->diffInDays(Carbon::parse($data_peminjaman['tanggal_kembali'])) * Buku::whereIn('id', PeminjamanItems::where('peminjaman_id', $data_peminjaman->id)->pluck('buku_id')->toarray())->sum('biaya_per_hari') ,
         ];
         return view($this->route.'selesai_transaksi', $data);
+    }
+
+    public function cetakStruk($data_id){
+        $cek_data = Peminjaman::where('id', $data_id)->first();
+
+        if(!empty($cek_data)){
+            $pdf = PDF::loadview($this->route.'komponen.cetak_struk',['peminjaman'=>$cek_data]);
+            return $pdf->stream();
+        }else{
+            $message = 'Data Tidak Ditemukan';
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
+        }
     }
 }
