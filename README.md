@@ -45,7 +45,7 @@ Dashboard
 Fitur peminjaman
 ![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
 Pemberitahuan transaksi berhasil
-![image](https://user-images.githubusercontent.com/52590303/139802247-c0b4e79a-3c16-4b24-b75d-59b8a50fcada.png)
+![image](https://user-images.githubusercontent.com/52590303/139802368-a0a53ccb-96bc-45bb-bf83-db2718245fdd.png)
 Fitur pengembalian
 ![image](https://user-images.githubusercontent.com/52590303/139216689-d2e1d217-8de1-4fff-93d4-13f9ddfcd301.png)
 
