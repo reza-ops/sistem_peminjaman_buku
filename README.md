@@ -40,7 +40,7 @@ Login
 ![image](https://user-images.githubusercontent.com/52590303/139620683-73df69f2-c52c-4b6f-91ff-ab49b4ad7f8a.png)
 Register![image](https://user-images.githubusercontent.com/52590303/139620815-004ca30e-69eb-42f4-88e9-122faf1c5708.png)
 Dashboard
-![image](https://user-images.githubusercontent.com/52590303/139800693-d44b0651-7910-4c99-84f0-4a62d2013725.png)
+![image](https://user-images.githubusercontent.com/52590303/139809310-830b9a0d-0a3c-457a-988c-712071783898.png)
 
 Fitur peminjaman
 ![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
