@@ -42,7 +42,7 @@
                             <div class="col-lg-12">
                                 <div class="p-5 row">
                                     <div class="text-center col-md-12">
-                                        <h3 class="h3 text-gray-900 mb-4">TRANSAKSI SELESAI</h3>
+                                        <h3 class="h3 text-gray-900 mb-4">TRANSAKSI BERHASIL</h3>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-center ">
