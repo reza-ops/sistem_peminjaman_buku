@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Master\BukuController;
 use App\Http\Controllers\Master\KategoriController;
@@ -29,9 +30,7 @@ Route::get('/', function () {
 Route::post('logged_in', [LoginController::class, 'authenticate'])->name('logged_in');
 Route::post('regisrasi_action', [LoginController::class, 'registrasi'])->name('regsitrasi_action');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 
 Route::resource('profile', ProfileController::class);
 
@@ -56,6 +55,7 @@ Route::group([
     Route::resource('pengunjung', PengunjungController::class)->except('destroy','show');
     Route::get('pengunjung/hapus/{data_id}',[PengunjungController::class,'destroy']);
     Route::get('pengunjung/get_data' ,[PengunjungController::class,'getData']);
+    Route::get('pengunjung/change_status_pengunjung/{data_id}' ,[PengunjungController::class,'changeStatusPengunjung']);
 });
 
 Route::group([
