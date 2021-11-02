@@ -120,7 +120,6 @@ class PeminjamanController extends Controller
             $request['pengunjung_id'] = $request['pengunjung'];
             $request['no_transaksi_peminjaman'] = $create_kode_transaksi;
             $request['is_sudah_kembali'] = 1;
-            $request['is_terlambat_kembali'] = 1;
             $request['is_sudah_bayar'] = $request['sudah_bayar'];
 
             $query = Peminjaman::create($request->all());

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaksi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Master\Buku;
+use App\Models\Master\Pengunjung;
 use App\Models\Transaksi\Peminjaman;
 use App\Models\Transaksi\PeminjamanItems;
 use Carbon\Carbon;
@@ -53,13 +54,26 @@ class PengembalianController extends Controller
     public function selesaiTransaksi($transaksi_id){
         DB::beginTransaction();
         $cek_data = Peminjaman::where('id', $transaksi_id)->first();
-        $update_data_peminjaman = $cek_data->update([
+        $set_data_peminjaman = [
             'is_sudah_kembali' => 0
-        ]);
+        ];
 
         $get_buku = Buku::wherein('id', PeminjamanItems::where('peminjaman_id', $cek_data->id)->pluck('buku_id')->toarray())->update([
             'is_stock' => 0
         ]);
+
+        if(Carbon::parse($cek_data->tanggal_kembali) < Carbon::now()->format('Y-m-d')){
+            $set_data_peminjaman = [
+                'is_terlambat_kembali' => 1
+            ];
+            $set_data_pengunjung = [
+                'is_boleh_pinjam' => 1
+            ];
+
+            $update_data_pengunjung = Pengunjung::where('id', $cek_data->pengunjung_id)->update($set_data_pengunjung);
+        }
+
+        $update_data_peminjaman = $cek_data->update($set_data_peminjaman);
 
         if ($update_data_peminjaman && $get_buku) {
             DB::commit();

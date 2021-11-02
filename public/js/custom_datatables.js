@@ -61,6 +61,43 @@ var global = function () {
                 };
             });
         });
+        $(id_datatable).on('click', '.btn-change-status-pengunjung', function (e) {
+            e.preventDefault();
+            var el = this;
+            var route = $(this).attr("data-route");
+            console.log(route);
+            Swal.fire({
+                title: "Apakah yakin mengubah data ini ?",
+                text: "Lanjutkan untuk mengubah",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: route,
+                        type: 'get', // replaced from put
+                        dataType: "JSON",
+                        beforeSend: function () {
+                            $.blockUI();
+                        },
+                        success: function (response) {
+                            if (response.status == true) {
+                                $(id_datatable).DataTable().ajax.reload();
+                                swal.fire("Berhasil Mengubah!", response.message, "success");
+                            } else {
+                                swal.fire("Failed!", response.message, "error");
+                            }
+                            $.unblockUI();
+                        },
+                        error: function (xhr) {
+                            console.log(xhr.responseText);
+                        }
+                    });
+                };
+            });
+        });
 
 
     };

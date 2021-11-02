@@ -34,7 +34,12 @@ class PengunjungController extends Controller
         $data_table =  DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('keterangan', function($query){
-                return $query->is_boleh_pinjam == '0' ? 'Boleh Pinjam' : 'Tidak Boleh Pinjam';
+                if($query->is_boleh_pinjam == '0'){
+                    $span = '<span class="badge badge-pill badge-success fz-11">Boleh Pinjam</span>';
+                }else {
+                    $span = '<span class="badge badge-pill badge-danger fz-11">Tidak Boleh Pinjam</span>';
+                }
+                return $span;
             })
             ->addColumn('biaya', function($query){
                 return 'Rp, '.number_format($query->biaya_per_hari, 2);
@@ -43,6 +48,9 @@ class PengunjungController extends Controller
                 $aksi = '';
                     $aksi = "<a href=" . URL::to('master/pengunjung/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
                     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
+                    if($query->is_boleh_pinjam == '1'){
+                        $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/change_status_pengunjung', ['data_id' =>$query->id]) . "' class='btn btn-warning btn-sm btn-change-status-pengunjung'>Ubah Status Pengunjung</a>";
+                    }
                 return $aksi;
             })
             ->rawColumns(['aksi'])
@@ -142,6 +150,27 @@ class PengunjungController extends Controller
     public function destroy($data_id){
         $delete = Pengunjung::where('id', $data_id)->delete();
         if ($delete) {
+            DB::commit();
+            $message = 'Sukses';
+            $response = [
+                'message' => $message,
+                'status'   => true,
+            ];
+            return response()->json($response);
+        } else {
+            DB::rollback();
+            $message = 'Gagal';
+            $response = [
+                'message' => $message,
+                'status'   => false,
+            ];
+            return response()->json($response);
+        }
+    }
+
+    public function changeStatusPengunjung($data_id){
+        $update = Pengunjung::where('id', $data_id)->update(['is_boleh_pinjam' => '0']);
+        if ($update) {
             DB::commit();
             $message = 'Sukses';
             $response = [

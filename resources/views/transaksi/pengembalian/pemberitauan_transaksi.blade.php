@@ -48,6 +48,9 @@
                                         <div class="text-center ">
                                             <h5 class="text-gray-900 mb-4">Terimakasih</h5>
                                             <p>No Transaksi : {{ $data->no_transaksi_peminjaman }}</p>
+                                            @if ($data->is_terlambat_kembali == '1')
+                                                <p class="text-danger">Transaksi terlambat silahkan update pengunjung di menu pengunjung</p>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-6">

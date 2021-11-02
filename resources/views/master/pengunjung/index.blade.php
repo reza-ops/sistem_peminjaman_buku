@@ -18,7 +18,7 @@
                     <tr>
                         <th width="5%" scope="col">No</th>
                         <th scope="col">Nama</th>
-                        <th scope="col">Keterangan</th>
+                        <th scope="col">Status Pengunjung</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
