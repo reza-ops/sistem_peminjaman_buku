@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Master;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PengunjungRequest;
 use App\Models\Master\Pengunjung;
+use App\Repositories\Pengujung\PengunjungRepository;
+use App\Repositories\Pengujung\ValidasiPengunjungRepositori;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -29,34 +33,8 @@ class PengunjungController extends Controller
         return view($this->route.'index', $data);
     }
 
-    public function getData(Request $request) {
-        $query = Pengunjung::query();
-        $data_table =  DataTables::of($query)
-            ->addIndexColumn()
-            ->addColumn('keterangan', function($query){
-                if($query->is_boleh_pinjam == '0'){
-                    $span = '<span class="badge badge-pill badge-success fz-11">Boleh Pinjam</span>';
-                }else {
-                    $span = '<span class="badge badge-pill badge-danger fz-11">Tidak Boleh Pinjam</span>';
-                }
-                return $span;
-            })
-            ->addColumn('biaya', function($query){
-                return 'Rp, '.number_format($query->biaya_per_hari, 2);
-            })
-            ->addColumn('aksi', function ($query) {
-                $aksi = '';
-                    $aksi = "<a href=" . URL::to('master/pengunjung/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
-                    $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
-                    if($query->is_boleh_pinjam == '1'){
-                        $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/change_status_pengunjung', ['data_id' =>$query->id]) . "' class='btn btn-warning btn-sm btn-change-status-pengunjung'>Ubah Status Pengunjung</a>";
-                    }
-                return $aksi;
-            })
-            ->rawColumns(['aksi'])
-            ->escapeColumns([]) //digunakan untuk render html
-            ->toJson();
-        return $data_table;
+    public function getData(Request $request, PengunjungRepository $pengunjungRepository) {
+        return $pengunjungRepository->getDataTable($request);
     }
 
     public function create(){
@@ -69,96 +47,60 @@ class PengunjungController extends Controller
         return view($this->route.'create', $data);
     }
 
-    public function store(Request $request){
-        $rules = [
-            'nama'  => 'required',
-            'alamat'  => 'required',
-            'tanggal_lahir'  => 'required',
-        ];
-
-        $alert = [
-            'required'  => ':attribute harus di isi',
-            'min'       => ':attribute Min :min Char'
-        ];
-        $validator = Validator::make($request->all(), $rules, $alert);
-
-        if ($validator->passes()) {
-
-            $request['is_boleh_pinjam'] = 0;
-            $request['kode_pengunjung'] = Helper::kode_pengunjung();
-            DB::beginTransaction();
-            $query = Pengunjung::create($request->all());
-
-            if ($query) {
-                DB::commit();
-                $message = 'Berhasil';
-                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
-            } else {
-                DB::rollback();
-                $message = 'Gagal';
-                return redirect()->back()->with('error', Helper::parsing_alert($message));
-            }
+    public function store(Request $request, PengunjungRepository $pengunjungRepository){
+        $validasi = new ValidasiPengunjungRepositori;
+        $validasi = $validasi->validasiStore($request);
+        if($validasi['status'] == false){
+            $message = Helper::parsing_alert($validasi['error']);
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
-
-        $message = Helper::parsing_alert($validator->errors()->all());
-        return redirect()->back()->with('error', Helper::parsing_alert($message));
+        try{
+            $pengunjungRepository->store($request);
+            $message = 'Berhasil';
+            return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
+        }catch(Exception $e){
+            $message = 'Gagal';
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
+        }
     }
 
-    public function edit($id){
+    public function edit($id, PengunjungRepository $pengunjungRepository){
         Helper::swal();
-        $kategori = Pengunjung::where('id', $id)->first();
         $data = [
             'route' => $this->route,
             'title' => $this->title,
             'header' => $this->header,
-            'data' => $kategori,
+            'data' => $pengunjungRepository->getDataById($id),
         ];
         return view($this->route.'update', $data);
     }
 
-    public function update(Request $request, Pengunjung $pengunjung){
-        $rules = [
-            'nama'  => 'required',
-            'alamat'  => 'required',
-            'tanggal_lahir'  => 'required',
-        ];
-
-        $alert = [
-            'required'  => ':attribute harus di isi',
-            'min'       => ':attribute Min :min Char'
-        ];
-        $validator = Validator::make($request->all(), $rules, $alert);
-
-        if ($validator->passes()) {
-
-            DB::beginTransaction();
-            $query = $pengunjung->update($request->all());
-
-            if ($query) {
-                DB::commit();
-                $message = 'Berhasil';
-                return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
-            } else {
-                DB::rollback();
-                $message = 'Gagal';
-                return redirect()->back()->with('error', Helper::parsing_alert($message));
-            }
+    public function update(Request $request, Pengunjung $pengunjung, PengunjungRepository $pengunjungRepository){
+        $validasi = new ValidasiPengunjungRepositori;
+        $validasi = $validasi->validasiStore($request);
+        if($validasi['status'] == false){
+            $message = Helper::parsing_alert($validasi['error']);
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
-        $message = Helper::parsing_alert($validator->errors()->all());
-        return redirect()->back()->with('error', Helper::parsing_alert($message));
+        try{
+            $pengunjungRepository->update($request, $pengunjung);
+            $message = 'Berhasil';
+            return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
+        }catch(Exception $e){
+            $message = 'Gagal';
+            return redirect()->back()->with('error', Helper::parsing_alert($message));
+        }
     }
-    public function destroy($data_id){
-        $delete = Pengunjung::where('id', $data_id)->delete();
-        if ($delete) {
-            DB::commit();
+    public function destroy($data_id, PengunjungRepository $pengunjungRepository){
+        try{
+            $pengunjungRepository->destroy($data_id);
             $message = 'Sukses';
             $response = [
                 'message' => $message,
                 'status'   => true,
             ];
             return response()->json($response);
-        } else {
-            DB::rollback();
+        }catch(Exception $e){
             $message = 'Gagal';
             $response = [
                 'message' => $message,
@@ -168,18 +110,16 @@ class PengunjungController extends Controller
         }
     }
 
-    public function changeStatusPengunjung($data_id){
-        $update = Pengunjung::where('id', $data_id)->update(['is_boleh_pinjam' => '0']);
-        if ($update) {
-            DB::commit();
+    public function changeStatusPengunjung($data_id, PengunjungRepository $pengunjungRepository){
+        try{
+            $pengunjungRepository->changeStatus($data_id);
             $message = 'Sukses';
             $response = [
                 'message' => $message,
                 'status'   => true,
             ];
             return response()->json($response);
-        } else {
-            DB::rollback();
+        }catch(Exception $e){
             $message = 'Gagal';
             $response = [
                 'message' => $message,

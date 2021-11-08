@@ -11,6 +11,7 @@
     </div>
 
     <div class="card-body">
+
         <form action="{{ route('master.kategori.store') }}" class="form-global-handle" method="POST" enctype="multipart/form-data">
             @csrf
             @method('POST')

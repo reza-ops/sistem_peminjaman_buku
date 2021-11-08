@@ -8,7 +8,12 @@ use App\Models\Master\Buku;
 use App\Models\Master\Pengunjung;
 use App\Models\Transaksi\Peminjaman;
 use App\Models\Transaksi\PeminjamanItems;
+use App\Repositories\Peminjaman\PeminjamanRepository;
+use App\Repositories\Peminjaman\ValidasiPeminjamanRepositori;
+use App\Services\Filter;
+use App\Services\SelectTwoService;
 use Carbon\Carbon;
+use Exception;
 use Validator;
 use PDF;
 use Illuminate\Http\Request;
@@ -30,19 +35,19 @@ class PeminjamanController extends Controller
         return view($this->route.'index', $data);
     }
 
-    public function searchKodeBuku(Request $request){
-        $cek_data = Buku::where('kode_buku', $request['kode'])->first();
+    public function searchKodeBuku(Request $request, Filter $filter){
+        $buku = $filter->initialize('buku', $request);
+        $data = $buku->filter($request);
 
-        if(empty($cek_data)){
+        if(empty($data)){
             $response = [
                 'html' => '<br><h4 class="text-danger">Buku Tidak Di temukan</h4>'
             ];
             return response()->json($response);
         }
-
         $data = [
             'route' => $this->route,
-            'data' => $cek_data,
+            'data' => $data,
         ];
 
         $view = view($this->route . 'komponen.data_buku', $data)->render();
@@ -55,118 +60,70 @@ class PeminjamanController extends Controller
 
     }
 
-    public function selectPengujung(Request $request){
-        if (session('error')) {
-            alert()->html('', session('error'), 'error');
+    public function selectPengujung(Request $request, SelectTwoService $selectTwoService){
+        $select = $selectTwoService->initialize('pengunjung', $request);
+        $response = $select->select($request);
+        $data= [];
+        foreach ($response as $key => $value) {
+            $data[] = ['id' => $value->id, 'text' => $value->nama ];
         }
-        $term = trim($request['no_kantong']);
-
-
-        $pengunjung = Pengunjung::query();
-
-        if (!empty($request['not_in'])) {
-            $id = collect($request['not_in']);
-            $pengunjung = $pengunjung->whereNotIn('id', $id);
-        }
-        if (!empty($term)) {
-            $pengunjung = $pengunjung->where('no_kantong', 'like', '%' . $term . '%');
-        }
-        $pengunjung = $pengunjung->get();
-        $response = [];
-
-        foreach ($pengunjung as $key => $value) {
-            $response[] = ['id' => $value->id, 'text' => $value->nama ];
-        }
-
-        return response()->json($response);
+        return response()->json($data);
     }
 
-    public function store(Request $request){
-        $rules = [
-            'pengunjung'        => 'required',
-            'tanggal_pinjam'       => 'required',
-            'tanggal_kembali' => 'required',
-        ];
+    public function store(Request $request, PeminjamanRepository $peminjamanRepository){
 
-        $alert = [
-            'required'  => ':attribute harus diisi',
-            'min'       => ':attribute Min :min Char'
-        ];
-        $validator = Validator::make($request->all(), $rules, $alert);
-
-        if ($validator->passes()) {
-
-            if(empty($request->buku_id)){
-                $data=[
-                    'message'=> 'Belum Memilih Buku',
-                    'status'=>false,
-                ];
-                return response()->json($data);
-            }
-            if(count(array_unique($request->buku_id))<count($request->buku_id))
-            {
-                $data=[
-                    'message'=> 'Buku Tidak Boleh Sama',
-                    'status'=>false,
-                ];
-                return response()->json($data);
-            }
-
-
-            $data_kode_buku = [
-                'pengunjung_id' => $request['pengunjung']
+        // start manual validasi menggunakan class
+        $validasi = new ValidasiPeminjamanRepositori;
+        $validasi = $validasi->validasiPeminjaman($request);
+        if($validasi['status'] == false) {
+            $data=[
+                'message'=> Helper::parsing_alert($validasi['error']),
+                'status'=>false,
             ];
-            $create_kode_transaksi = Helper::kode_transaksi($data_kode_buku);
-            $request['pengunjung_id'] = $request['pengunjung'];
-            $request['no_transaksi_peminjaman'] = $create_kode_transaksi;
-            $request['is_sudah_kembali'] = 1;
-            $request['is_sudah_bayar'] = $request['sudah_bayar'];
-
-            $query = Peminjaman::create($request->all());
-            DB::beginTransaction();
-
-
-            foreach($request->buku_id as $key => $value){
-
-                $create_peminajamn_item[$key] = PeminjamanItems::create([
-                    'peminjaman_id' => $query->id,
-                    'buku_id' => $value,
-                ]);
-
-                $d_stock_buku = [
-                    'is_stock' => 1,
-                ];
-
-                $update_status_buku[$key] = Buku::where('id', $value)->update($d_stock_buku);
-            }
-
-            if ($query && $create_peminajamn_item && $update_status_buku) {
-                DB::commit();
-                $data=[
-                    'message'=>'Berhasil',
-                    'status'=>true,
-                    'peminjaman'=>$query,
-                    'url_finish_transaksi' => route($this->route.'get_detail_transaksi', ['data_id' => $query->id])
-                ];
-                return response()->json($data);
-            } else {
-                DB::rollback();
-                $data=[
-                    'message'=>'Gagal',
-                    'status'=>false,
-                ];
-                return response()->json($data);
-            }
+            return response()->json($data);
         }
-        $data=[
-            'message'=> Helper::parsing_alert($validator->errors()->all()),
-            'status'=>false,
-        ];
-        return response()->json($data);
+        // end manual validasi menggunakan class
+
+        // start cek status buku menggunakan class
+        $cek_status_buku = new ValidasiPeminjamanRepositori;
+        $cek_status_buku = $cek_status_buku->cekStatusBuku($request->buku_id);
+        if($cek_status_buku['status'] == false) {
+            $data=[
+                'message'=>$cek_status_buku['error'],
+                'status'=>false,
+            ];
+            return response()->json($data);
+        }
+        // end cek status buku menggunakan class
+
+        // peminjaman proses
+        try{
+            $create_peminjaman       = $peminjamanRepository->store($request);
+            DB::beginTransaction();
+            $create_peminjaman_items = $peminjamanRepository->createPeminjamanItems($request, $create_peminjaman);
+            $update_status_buku      = $peminjamanRepository->updateStatusBuku($request);
+            $data=[
+                'message'=>'Berhasil',
+                'status'=>true,
+                'peminjaman'=>$create_peminjaman,
+                'url_finish_transaksi' => route($this->route.'get_detail_transaksi', ['data_id' => $create_peminjaman->id])
+            ];
+            DB::commit();
+            return response()->json($data);
+
+        }catch(Exception $e){
+            DB::rollback();
+            $data=[
+                'message'=>'Gagal',
+                'status'=>false,
+            ];
+            return response()->json($data);
+        }
     }
     public function getDetailTransaksi($data_id){
 
-        $data_peminjaman = Peminjaman::where('id', $data_id)->first();
+        $data_peminjaman = New PeminjamanRepository;
+        $data_peminjaman = $data_peminjaman->getDataById($data_id);
         $data = [
             'route' => $this->route,
             'title' => $this->title,
@@ -178,10 +135,11 @@ class PeminjamanController extends Controller
     }
 
     public function cetakStruk($data_id){
-        $cek_data = Peminjaman::where('id', $data_id)->first();
+        $data_peminjaman = new PeminjamanRepository;
+        $data_peminjaman = $data_peminjaman->getDataById($data_id);
 
-        if(!empty($cek_data)){
-            $pdf = PDF::loadview($this->route.'komponen.cetak_struk',['peminjaman'=>$cek_data]);
+        if(!empty($data_peminjaman)){
+            $pdf = PDF::loadview($this->route.'komponen.cetak_struk',['peminjaman'=>$data_peminjaman]);
             return $pdf->stream();
         }else{
             $message = 'Data Tidak Ditemukan';
