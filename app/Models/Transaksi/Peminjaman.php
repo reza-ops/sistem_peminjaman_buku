@@ -26,4 +26,18 @@ class Peminjaman extends Model
     public function peminjaman_item(){
         return $this->hasMany(PeminjamanItems::class, 'peminjaman_id', 'id');
     }
+
+    public static function getDataTableBerhasil(){
+        $query = self::where('is_sudah_kembali',0)->where('is_terlambat_kembali',0);
+        return $query;
+    }
+
+    public static function getDataTableTerlambat(){
+        $query = self::where('is_sudah_kembali',0)->where('is_terlambat_kembali',1);
+        return $query;
+    }
+
+    public function denda(){
+        return $this->hasOne(Denda::class, 'peminjaman_id', 'id');
+    }
 }

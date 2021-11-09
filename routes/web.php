@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DaftarTransaksi\BerhasilController;
+use App\Http\Controllers\DaftarTransaksi\TerlambatController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Master\BukuController;
@@ -83,4 +85,18 @@ Route::group([
         Route::post('search_no_transaksi',[ PengembalianController::class,'searchNoTransaksi'])->name('search_no_transaksi');
         Route::get('selesai_transaksi/{transaksi_id}',[ PengembalianController::class,'selesaiTransaksi'])->name('selesai_transaksi');
     });
+
+});
+Route::group([
+    'prefix'    => 'daftar_transaksi',
+    'as'        => 'daftar_transaksi.',
+    'auth:sanctum'=> 'verified',
+    ],  function ()  {
+        Route::resource('berhasil', BerhasilController::class)->only('index');
+        Route::get('berhasil/get_data' ,[BerhasilController::class,'getData']);
+        Route::get('berhasil/{data_id}/detail' ,[BerhasilController::class,'detail']);
+
+        Route::resource('terlambat', TerlambatController::class)->only('index','update');
+        Route::get('terlambat/get_data' ,[TerlambatController::class,'getData']);
+        Route::get('terlambat/{data_id}/detail' ,[TerlambatController::class,'detail']);
 });

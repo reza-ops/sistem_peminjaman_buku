@@ -5,6 +5,7 @@ namespace App\Repositories\Pengembalian;
 use App\Contracts\Pengembalian\PengembalianRepositoriInterface;
 use App\Models\Master\Buku;
 use App\Models\Master\Pengunjung;
+use App\Models\Transaksi\Denda;
 use App\Models\Transaksi\Peminjaman;
 use App\Models\Transaksi\PeminjamanItems;
 use Carbon\Carbon;
@@ -34,13 +35,20 @@ class PengembalianRepositori implements PengembalianRepositoriInterface{
 
         if(Carbon::parse($transakasi->tanggal_kembali) < Carbon::now()->format('Y-m-d')){
             $set_data_peminjaman = [
-                'is_terlambat_kembali' => 1
+                'is_terlambat_kembali' => 1,
+                'is_sudah_kembali' => 0,
             ];
             $set_data_pengunjung = [
                 'is_boleh_pinjam' => 1
             ];
-
             $update_data_pengunjung = Pengunjung::where('id', $transakasi->pengunjung_id)->update($set_data_pengunjung);
+
+            $set_data_denda = [
+                'peminjaman_id' => $transakasi->id,
+                'total_terlambat' => Carbon::parse($transakasi->tanggal_kembali)->diffInDays(Carbon::now())
+            ];
+
+            $create_denda = Denda::create($set_data_denda);
         }
 
         $update_transakasi = $transakasi->update($set_data_peminjaman);

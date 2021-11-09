@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class Pengunjung {
     public function select($request){
         $term = trim($request['nama']);
-        $pengunjung = MasterPengunjung::query();
+        $pengunjung = MasterPengunjung::getDataSelectTransaksi();
         if (!empty($request['not_in'])) {
             $id = collect($request['not_in']);
             $pengunjung = $pengunjung->whereNotIn('id', $id);

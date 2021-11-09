@@ -16,4 +16,8 @@ class Pengunjung extends Model
         'is_boleh_pinjam',
         'kode_pengunjung',
     ];
+    public static function getDataSelectTransaksi(){
+        $query = self::where('is_boleh_pinjam', 0);
+        return $query;
+    }
 }
