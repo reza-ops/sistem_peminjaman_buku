@@ -36,7 +36,7 @@
                 <input type="hidden" name="denda_id" value="{{ $data->denda->id }}">
                 <div class="form-group">
                     <label for="nama">Total Terlambat </label>
-                    <input type="text" value="{{ $data->denda->total_terlambat }}" class="form-control" readonly>
+                    <input type="text" value="{{ $data->denda->total_terlambat }} Hari" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="total_biaya">Total Biaya </label>
@@ -54,7 +54,7 @@
                 </div>
                 @endif
                 @if ($data->denda->is_sudah_bayar_denda == '1')
-                    <button type="submit" class="btn btn-success">Update Daenda</button>
+                    <button type="submit" class="btn btn-success">Update Denda</button>
                 @endif
             </form>
 

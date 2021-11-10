@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DaftarTransaksi\BelumKembaliController;
 use App\Http\Controllers\DaftarTransaksi\BerhasilController;
 use App\Http\Controllers\DaftarTransaksi\TerlambatController;
 use App\Http\Controllers\DashboardController;
@@ -8,6 +9,9 @@ use App\Http\Controllers\Master\BukuController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\PengunjungController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekapTransaksi\BelumKembaliController as RekapTransaksiBelumKembaliController;
+use App\Http\Controllers\RekapTransaksi\BerhasilController as RekapTransaksiBerhasilController;
+use App\Http\Controllers\RekapTransaksi\TerlambatController as RekapTransaksiTerlambatController;
 use App\Http\Controllers\Transaksi\PeminjamanController;
 use App\Http\Controllers\Transaksi\PengembalianController;
 use App\Models\Master\Pengunjung;
@@ -99,4 +103,19 @@ Route::group([
         Route::resource('terlambat', TerlambatController::class)->only('index','update');
         Route::get('terlambat/get_data' ,[TerlambatController::class,'getData']);
         Route::get('terlambat/{data_id}/detail' ,[TerlambatController::class,'detail']);
+
+        Route::resource('belum_kembali', BelumKembaliController::class)->only('index');
+        Route::get('belum_kembali/get_data' ,[BelumKembaliController::class,'getData']);
+        Route::get('belum_kembali/{data_id}/detail' ,[BelumKembaliController::class,'detail']);
+});
+Route::group([
+    'prefix'    => 'rekap_transaksi',
+    'as'        => 'rekap_transaksi.',
+    'auth:sanctum'=> 'verified',
+    ],  function ()  {
+        Route::resource('berhasil', RekapTransaksiBerhasilController::class)->only('index','store');
+
+        Route::resource('belum_kembali', RekapTransaksiBelumKembaliController::class)->only('index','store');
+
+        Route::resource('terlambat', RekapTransaksiTerlambatController::class)->only('index','store');
 });

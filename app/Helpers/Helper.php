@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class Helper{
     public static function kode_buku($data)
     {
-        $kode = date('ymd') . '';
+        $kode = 'KB'.date('ymd') . '';
         $cek_kode_buku = Buku::where('kode_buku', 'like', '%' . $kode . '%')
         ->select('kode_buku')
         ->orderBy('kode_buku', 'desc')
@@ -51,7 +51,7 @@ class Helper{
 
     public static function kode_pengunjung()
     {
-        $kode = date('ymd') . 'KP'.'';
+        $kode = 'KP'.date('ymd') .'';
         $cek_kode_pengunjung = MasterPengunjung::where('kode_pengunjung', 'like', '%' . $kode . '%')
         ->select('kode_pengunjung')
         ->orderBy('kode_pengunjung', 'desc')
@@ -86,7 +86,7 @@ class Helper{
     }
 
     public static function kode_transaksi($data){
-        $kode = date('ymd') . $data['pengunjung_id'].'';
+        $kode = 'KT'.date('ymd') . $data['pengunjung_id'].'';
         $cek_no_transaksi = Peminjaman::where('no_transaksi_peminjaman', 'like', '%' . $kode . '%')
         ->select('no_transaksi_peminjaman')
         ->orderBy('no_transaksi_peminjaman', 'desc')

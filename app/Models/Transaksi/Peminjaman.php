@@ -40,4 +40,30 @@ class Peminjaman extends Model
     public function denda(){
         return $this->hasOne(Denda::class, 'peminjaman_id', 'id');
     }
+
+    public static function getDataTableBelumKembali(){
+        $query = self::where('is_sudah_kembali',1);
+        return $query;
+    }
+
+    public static function getDataRekapBerhasil($tanggal_awal, $tanggal_akhir){
+        $query = self::where('is_sudah_kembali',0)->where('is_terlambat_kembali', 0)
+        ->whereBetween('tanggal_pinjam', [$tanggal_awal, $tanggal_akhir])
+        ->get();
+        return $query;
+    }
+
+    public static function getDataRekapBelumKembali($tanggal_awal, $tanggal_akhir){
+        $query = self::where('is_sudah_kembali',1)
+        ->whereBetween('tanggal_pinjam', [$tanggal_awal, $tanggal_akhir])
+        ->get();
+        return $query;
+    }
+
+    public static function getDataRekapTerlambat($tanggal_awal, $tanggal_akhir){
+        $query = self::where('is_terlambat_kembali',1)
+        ->whereBetween('tanggal_pinjam', [$tanggal_awal, $tanggal_akhir])
+        ->get();
+        return $query;
+    }
 }

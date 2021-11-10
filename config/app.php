@@ -181,6 +181,8 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         // dom pdf
         Barryvdh\DomPDF\ServiceProvider::class,
+        // excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -239,6 +241,8 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         // dom pdf
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        // Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

@@ -54,7 +54,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <a class="btn btn-info bg-back" href="{{ route($route.'index') }}">Kembali Ke Menu Pegnembalian</a>
+                                            <a class="btn btn-info bg-back" href="{{ route($route.'index') }}">Kembali Ke Menu Pengembalian</a>
+                                        @if ($data->is_terlambat_kembali == '1')
+                                            <br>
+                                            <br>
+                                            <a class="btn btn-danger bg-back" href="{{ URL::to('daftar_transaksi/terlambat/'.$data->id.'/detail') }}">Update Denda</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

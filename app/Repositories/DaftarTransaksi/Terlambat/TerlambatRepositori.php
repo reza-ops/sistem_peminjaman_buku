@@ -15,10 +15,17 @@ class TerlambatRepositori implements TerlambatRepositoriInterface{
         $query = Peminjaman::getDataTableTerlambat();
         $data_table =  DataTables::of($query)
         ->addIndexColumn()
+        ->addColumn('keterangan_pembayaran', function ($query){
+            $data = 'Belum Bayar Denda';
+            if($query->denda->is_sudah_bayar_denda == '0'){
+                $data = 'Sudah Bayar Denda';
+            }
+
+            return $data;
+        })
         ->addColumn('aksi', function ($query) {
             $aksi = '';
                 $aksi = "<a href=" . URL::to('daftar_transaksi/terlambat/'.$query->id.'/detail') . " class='btn btn-sm btn-primary btn-edit'>Detail</a>";
-            //     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/kategori/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
             return $aksi;
         })
         ->rawColumns(['aksi'])

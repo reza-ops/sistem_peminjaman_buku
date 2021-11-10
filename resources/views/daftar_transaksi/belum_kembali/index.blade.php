@@ -20,7 +20,6 @@
                         <th scope="col">NO Transaksi</th>
                         <th scope="col">Tanggal Pinjam</th>
                         <th scope="col">Tanggal Kembali</th>
-                        <th scope="col">Keterangan</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
@@ -38,13 +37,12 @@
 <script type="text/javascript">
       $(document).ready(function () {
         var id_datatable = "#data-table";
-        var url_ajax = '{!! URL::to('daftar_transaksi/terlambat/get_data') !!}';
+        var url_ajax = '{!! URL::to('daftar_transaksi/belum_kembali/get_data') !!}';
         var column = [
                         { data: 'DT_RowIndex', searchable: false, orderable: false, className: 'dt-center' },
                         { data: 'no_transaksi_peminjaman', name: 'no_transaksi_peminjaman' },
                         { data: 'tanggal_pinjam', name: 'tanggal_pinjam' },
                         { data: 'tanggal_kembali', name: 'tanggal_kembali' },
-                        { data: 'keterangan_pembayaran', name: 'keterangan_pembayaran' },
                         { data: 'aksi', name: 'aksi' },
                 ];
         global.init_datatable(id_datatable, url_ajax, column);
