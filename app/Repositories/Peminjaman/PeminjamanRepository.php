@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Models\Master\Buku;
 use App\Models\Transaksi\Peminjaman;
 use App\Models\Transaksi\PeminjamanItems;
+use Carbon\Carbon;
 
 class PeminjamanRepository implements PeminjamanRepositoryInterface{
     public function store($request)
@@ -15,9 +16,11 @@ class PeminjamanRepository implements PeminjamanRepositoryInterface{
         $peminjaman->no_transaksi_peminjaman = Helper::kode_transaksi(['pengunjung_id' => $request->input('pengunjung')]);
         $peminjaman->pengunjung_id           = $request->input('pengunjung');
         $peminjaman->is_sudah_kembali        = 1;
+        $peminjaman->is_terlambat_kembali        = 0;
         $peminjaman->is_sudah_bayar          = $request->input('sudah_bayar');
         $peminjaman->tanggal_pinjam          = $request->input('tanggal_pinjam');
         $peminjaman->tanggal_kembali         = $request->input('tanggal_kembali');
+        $peminjaman->total_harga             = Carbon::parse( $request->input('tanggal_pinjam'))->diffInDays(Carbon::parse( $request->input('tanggal_kembali'))) * Buku::whereIn('id', $request->input('buku_id'))->sum('biaya_per_hari') ;
         $peminjaman->save();
 
         return $peminjaman;

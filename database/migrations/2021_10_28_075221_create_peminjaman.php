@@ -20,8 +20,10 @@ class CreatePeminjaman extends Migration
             $table->date('tanggal_kembali');
             $table->integer('is_sudah_bayar');
             $table->integer('is_sudah_kembali');
-            $table->integer('is_terlambat_kembali');
+            $table->integer('is_terlambat_kembali')->nullable();
             $table->string('no_transaksi_peminjaman');
+            $table->string('total_harga');
+            $table->date('tanggal_pengembalian')->nullable();
             $table->timestamps();
         });
     }

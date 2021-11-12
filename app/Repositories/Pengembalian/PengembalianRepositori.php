@@ -30,13 +30,15 @@ class PengembalianRepositori implements PengembalianRepositoriInterface{
     {
 
         $set_data_peminjaman = [
-            'is_sudah_kembali' => 0
+            'is_sudah_kembali' => 0,
+            'tanggal_pengembalian' => Carbon::now(),
         ];
 
         if(Carbon::parse($transakasi->tanggal_kembali) < Carbon::now()->format('Y-m-d')){
             $set_data_peminjaman = [
                 'is_terlambat_kembali' => 1,
                 'is_sudah_kembali' => 0,
+                'tanggal_pengembalian' => Carbon::now(),
             ];
             $set_data_pengunjung = [
                 'is_boleh_pinjam' => 1

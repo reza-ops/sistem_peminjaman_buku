@@ -100,8 +100,15 @@
 
                 var getIdBuku = $(this).data('id');
                 var getNamaBuku = $(this).data('nama');
-
-                $("#divDaftarBuku").append('<div  class="form-group row div'+getIdBuku+'"><div  class="col-md-8"><input type="text" value="'+getNamaBuku+'" class="form-control" readonly><input type="hidden" id="buku_id" name="list_buku" value="'+getIdBuku+'" ></div><div  class="col-md-4"><button type="submit" class="btn btn-danger btnHapusBuku" data-id="'+getIdBuku+'">Hapus Buku</button></div>');
+                if($(".div" + getIdBuku).length == 0) {
+                    $("#divDaftarBuku").append('<div  class="form-group row div'+getIdBuku+'"><div  class="col-md-8"><input type="text" value="'+getNamaBuku+'" class="form-control" readonly><input type="hidden" id="buku_id" name="list_buku" value="'+getIdBuku+'" ></div><div  class="col-md-4"><button type="submit" class="btn btn-danger btnHapusBuku" data-id="'+getIdBuku+'">Hapus Buku</button></div>');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        html: 'Buku Sudah Di Pilih',
+                        })
+                }
             });
         }
         $('#divDaftarBuku').on('click', '.btnHapusBuku', function(e) {

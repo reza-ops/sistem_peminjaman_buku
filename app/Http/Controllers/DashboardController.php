@@ -16,6 +16,7 @@ class DashboardController extends Controller
 
     public function index(){
         $get_data_peminjaman = Peminjaman::get();
+        $data_buku = [];
 
         $period = CarbonPeriod::create(Carbon::now()->firstOfMonth(), Carbon::now()->endOfMonth());
         foreach ($period as $key => $date) {

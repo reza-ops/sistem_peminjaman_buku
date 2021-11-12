@@ -18,6 +18,8 @@ class Peminjaman extends Model
         'is_sudah_kembali',
         'is_terlambat_kembali',
         'no_transaksi_peminjaman',
+        'total_harga',
+        'tanggal_pengembalian',
     ];
 
     public function pengunjung(){
