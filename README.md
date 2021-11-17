@@ -34,19 +34,3 @@ Cara Untuk Install SISTEM PEMINJAMAN
 7. masuk ke aplikasi
 8. register
 9. masuk ke dashboard
-
-Contoh Aplikasi <br>
-Login
-![image](https://user-images.githubusercontent.com/52590303/139620683-73df69f2-c52c-4b6f-91ff-ab49b4ad7f8a.png)
-Register![image](https://user-images.githubusercontent.com/52590303/139620815-004ca30e-69eb-42f4-88e9-122faf1c5708.png)
-Dashboard
-![image](https://user-images.githubusercontent.com/52590303/139809310-830b9a0d-0a3c-457a-988c-712071783898.png)
-
-Fitur peminjaman
-![image](https://user-images.githubusercontent.com/52590303/139216458-1e1fba80-371c-41bd-b065-578d1b7f2e28.png)
-Pemberitahuan transaksi berhasil
-![image](https://user-images.githubusercontent.com/52590303/139802368-a0a53ccb-96bc-45bb-bf83-db2718245fdd.png)
-Fitur pengembalian
-![image](https://user-images.githubusercontent.com/52590303/139216689-d2e1d217-8de1-4fff-93d4-13f9ddfcd301.png)
-
-
