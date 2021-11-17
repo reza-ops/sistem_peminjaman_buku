@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Master\Buku;
 use App\Models\Transaksi\PeminjamanItems;
 use App\Repositories\Pengembalian\PengembalianRepositori;
+use App\Repositories\Pengembalian\PengembalianValidasiRepositori;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 
 class PengembalianController extends Controller
 {
@@ -41,7 +43,6 @@ class PengembalianController extends Controller
         $data = [
             'route' => $this->route,
             'data' => $data_peminjaman,
-            'total_harga' =>  Carbon::parse($data_peminjaman['tanggal_pinjam'])->diffInDays(Carbon::parse($data_peminjaman['tanggal_kembali'])) * Buku::whereIn('id', PeminjamanItems::where('peminjaman_id', $data_peminjaman->id)->pluck('buku_id')->toarray())->sum('biaya_per_hari') ,
         ];
 
         $view = view($this->route . 'komponen.data_transaksi', $data)->render();
@@ -77,6 +78,56 @@ class PengembalianController extends Controller
                 'status'=>false,
             ];
             return redirect()->back();
+        }
+    }
+
+    public function sendDenda(Request $request){
+        $validasi = new PengembalianValidasiRepositori;
+        $validasi = $validasi->validasi_send_denda($request);
+        if($validasi['status'] == false) {
+            $data=[
+                'message'=>$validasi['error'],
+                'status'=>false,
+            ];
+            return response()->json($data);
+        }
+        try{
+            $data_send_denda = new PengembalianRepositori;
+            $data_send_denda = $data_send_denda->sendDenda($request->all());
+            $data=[
+                'message'=>'Berhasil',
+                'status'=>true,
+            ];
+            DB::commit();
+            return response()->json($data);
+
+        }catch(Exception $e){
+            $data=[
+                'message'=> 'Gagal',
+                'status'=>false,
+            ];
+            return response()->json($data);
+        }
+    }
+
+    public function getBiayaLainLain(Request $request){
+        try{
+            $data_send_denda = new PengembalianRepositori;
+            $data_send_denda = $data_send_denda->getBiayaLain($request->all());
+            $data=[
+                'message' => 'Berhasil',
+                'status'  => true,
+                'data'    => $data_send_denda,
+                'total'    => number_format(collect($data_send_denda)->pluck('total')->sum(),2),
+            ];
+            return response()->json($data);
+
+        }catch(Exception $e){
+            $data=[
+                'message'=> 'Gagal',
+                'status'=>false,
+            ];
+            return response()->json($data);
         }
     }
 

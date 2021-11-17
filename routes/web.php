@@ -13,6 +13,7 @@ use App\Http\Controllers\RekapTransaksi\BelumKembaliController as RekapTransaksi
 use App\Http\Controllers\RekapTransaksi\BerhasilController as RekapTransaksiBerhasilController;
 use App\Http\Controllers\RekapTransaksi\TerlambatController as RekapTransaksiTerlambatController;
 use App\Http\Controllers\Transaksi\PeminjamanController;
+use App\Http\Controllers\Transaksi\PengembalianBermasalahController;
 use App\Http\Controllers\Transaksi\PengembalianController;
 use App\Models\Master\Pengunjung;
 use App\Models\Transaksi\Peminjaman;
@@ -88,7 +89,12 @@ Route::group([
     ], function () {
         Route::post('search_no_transaksi',[ PengembalianController::class,'searchNoTransaksi'])->name('search_no_transaksi');
         Route::get('selesai_transaksi/{transaksi_id}',[ PengembalianController::class,'selesaiTransaksi'])->name('selesai_transaksi');
+        Route::post('send_denda',[ PengembalianController::class,'sendDenda'])->name('send_denda');
+        Route::post('get_biaya_lain_lain',[ PengembalianController::class,'getBiayaLainLain'])->name('get_biaya_lain_lain');
     });
+
+    Route::resource('pengembalian_bermasalah', PengembalianBermasalahController::class)->only('index');
+    Route::post('pengembalian_bermasalah/search_no_transaksi', [PengembalianBermasalahController::class,'searchNoTransaksi'])->name('pengembalian_bermasalah.search_no_transaksi');
 
 });
 Route::group([

@@ -30,12 +30,19 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h3>Informasi Item</h3>
+            <h3>Informasi Buku Bermasalah</h3>
             <div class="form-group">
-                <label for="nama"> Daftar Buku Yang Dipinjam </label>
-                @foreach ($data->peminjaman_item as $key => $value )
-                    <input type="text" name="nama" value="{{ $value->buku->nama }}" class="form-control" readonly><br>
+                <label for="nama"> Daftar Buku Yang Bermasalah </label>
+                @foreach ($data->peminjaman_bermasalah as $key => $value )
+                    <input type="text" name="nama" value="{{ $value->buku->nama  }}" class="form-control" readonly><br>
                 @endforeach
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Denda Buku Bermasalah</h3>
+            <div class="form-group">
+                <label for="nama"> Total </label>
+                <input type="text" name="nama" value="Rp, {{ number_format(collect($data->peminjaman_bermasalah)->pluck('denda')->sum(),2)  }}" class="form-control" readonly><br>
             </div>
         </div>
 

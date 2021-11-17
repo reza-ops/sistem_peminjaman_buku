@@ -68,4 +68,7 @@ class Peminjaman extends Model
         ->get();
         return $query;
     }
+    public function peminjaman_bermasalah(){
+        return $this->hasMany(PeminjamanBermasalah::class, 'transaksi_id', 'id');
+    }
 }

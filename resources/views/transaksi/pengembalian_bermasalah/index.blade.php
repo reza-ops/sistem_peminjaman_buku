@@ -48,6 +48,7 @@
                 success:function(data)
                 {
                     $('.showTransaksi').html(data.html);
+                    listTransaksi();
                 }
             })
         });

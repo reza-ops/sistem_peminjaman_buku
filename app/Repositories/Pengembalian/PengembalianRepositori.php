@@ -7,6 +7,7 @@ use App\Models\Master\Buku;
 use App\Models\Master\Pengunjung;
 use App\Models\Transaksi\Denda;
 use App\Models\Transaksi\Peminjaman;
+use App\Models\Transaksi\PeminjamanBermasalah;
 use App\Models\Transaksi\PeminjamanItems;
 use Carbon\Carbon;
 
@@ -55,5 +56,36 @@ class PengembalianRepositori implements PengembalianRepositoriInterface{
 
         $update_transakasi = $transakasi->update($set_data_peminjaman);
         return $update_transakasi;
+    }
+    public function sendDenda($request)
+    {
+        $set_data_peminjaman_bermasalah = [
+            'buku_id'      => $request['id_buku'],
+            'transaksi_id' => $request['id_transaksi'],
+            'denda'        => $request['denda'],
+            'keterangan'   => $request['keterangan'],
+        ];
+
+        return PeminjamanBermasalah::create($set_data_peminjaman_bermasalah);
+    }
+    public function getBiayaLain($transaksi_id)
+    {
+        $query = PeminjamanBermasalah::where('transaksi_id', $transaksi_id['id_transaksi'])
+        ->join('buku','buku.id','peminjaman_bermasalah.buku_id')
+        ->select('buku.nama as nama_buku', 'peminjaman_bermasalah.denda','peminjaman_bermasalah.keterangan','peminjaman_bermasalah.buku_id')
+        ->get();
+
+        $data = [];
+        foreach($query as $key => $value){
+            $data[$key] = [
+                'nama_buku' => $value->nama_buku,
+                'keterangan' => $value->keterangan,
+                'denda' => number_format($value->denda,2),
+                'total' => $value->denda,
+                'buku_id' => $value->buku_id,
+            ];
+        }
+
+        return $data;
     }
 }
