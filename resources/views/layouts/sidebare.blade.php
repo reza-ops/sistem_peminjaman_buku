@@ -12,7 +12,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item {{ (strpos(Route::currentRouteName(), 'dashboard') == 'false') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('dashboard')}}">
             <i class="fas fa-fw fa-columns"></i>
             <span>Dashboard</span></a>
@@ -33,12 +33,12 @@
             <i class="fas fa-fw fa-cog"></i>
             <span>Master</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse {{ (strpos(Route::currentRouteName(), 'master') == 'false') ? 'show' : '' }}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Master Data:</h6>
-                <a class="collapse-item" href="{{ route('master.kategori.index') }}">Kategori</a>
-                <a class="collapse-item" href="{{ route('master.buku.index') }}">Buku</a>
-                <a class="collapse-item" href="{{ route('master.pengunjung.index') }}">Pengunjung</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'master.kategori') == 'false') ? 'active' : '' }}" href="{{ route('master.kategori.index') }}">Kategori</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'master.buku') == 'false') ? 'active' : '' }}" href="{{ route('master.buku.index') }}">Buku</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'master.pengunjung') == 'false') ? 'active' : '' }}" href="{{ route('master.pengunjung.index') }}">Pengunjung</a>
             </div>
         </div>
     </li>
@@ -50,12 +50,13 @@
             <i class="fas fa-fw fa-wrench"></i>
             <span>Transaksi</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+        {{-- {{ dd(  strpos(Route::currentRouteName(),'rekap_transaksi')  )   }} --}}
+        <div id="collapseUtilities" class="collapse {{ (strpos(Route::currentRouteName(), 'transaksi') == 'false') ? 'show' : '' }}" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Transaksi:</h6>
-                <a class="collapse-item" href="{{ route('transaksi.peminjaman.index') }}">Peminjaman</a>
-                <a class="collapse-item" href="{{ route('transaksi.pengembalian.index') }}">Pengembalian</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'transaksi.peminjaman') == 'false') ? 'active' : '' }}" href="{{ route('transaksi.peminjaman.index') }}">Peminjaman</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'transaksi.pengembalian') == 'false') ? 'active' : '' }}" href="{{ route('transaksi.pengembalian.index') }}">Pengembalian</a>
             </div>
         </div>
     </li>
@@ -66,13 +67,13 @@
             <i class="fas fa-fw fa-list"></i>
             <span>Daftar Transaksi</span>
         </a>
-        <div id="transaksiBermasalah" class="collapse" aria-labelledby="headingUtilities"
+        <div id="transaksiBermasalah" class="collapse {{ (strpos(Route::currentRouteName(), 'daftar_transaksi') == 'false') ? 'show' : '' }}" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Daftar Transaksi:</h6>
-                <a class="collapse-item" href="{{ route('daftar_transaksi.berhasil.index') }}">Berhasil</a>
-                <a class="collapse-item" href="{{ route('daftar_transaksi.belum_kembali.index') }}">Belum Kembali</a>
-                <a class="collapse-item" href="{{ route('daftar_transaksi.terlambat.index') }}">Terlambat</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'daftar_transaksi.berhasil') == 'false') ? 'active' : '' }}" href="{{ route('daftar_transaksi.berhasil.index') }}">Berhasil</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'daftar_transaksi.belum_kembali') == 'false') ? 'active' : '' }}" href="{{ route('daftar_transaksi.belum_kembali.index') }}">Belum Kembali</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'daftar_transaksi.terlambat') == 'false') ? 'active' : '' }}" href="{{ route('daftar_transaksi.terlambat.index') }}">Terlambat</a>
             </div>
         </div>
     </li>
@@ -83,13 +84,13 @@
             <i class="fas fa-fw fa-download"></i>
             <span>Rekap Transaksi</span>
         </a>
-        <div id="RekapTransaksi" class="collapse" aria-labelledby="headingUtilities"
+        <div id="RekapTransaksi" class="collapse {{ (strpos(Route::currentRouteName(), 'rekap_transaksi') == 'false') ? 'show' : '' }}" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Rekap Transaksi:</h6>
-                <a class="collapse-item" href="{{ route('rekap_transaksi.berhasil.index') }}">Berhasil</a>
-                <a class="collapse-item" href="{{ route('rekap_transaksi.belum_kembali.index') }}">Belum Kembali</a>
-                <a class="collapse-item" href="{{ route('rekap_transaksi.terlambat.index') }}">Terlambat</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'rekap_transaksi.berhasil') == 'false') ? 'active' : '' }}" href="{{ route('rekap_transaksi.berhasil.index') }}">Berhasil</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'rekap_transaksi.belum_kembali') == 'false') ? 'active' : '' }}" href="{{ route('rekap_transaksi.belum_kembali.index') }}">Belum Kembali</a>
+                <a class="collapse-item {{ (strpos(Route::currentRouteName(), 'rekap_transaksi.terlambat') == 'false') ? 'active' : '' }}" href="{{ route('rekap_transaksi.terlambat.index') }}">Terlambat</a>
             </div>
         </div>
     </li>
