@@ -38,3 +38,7 @@ Cara Untuk Install SISTEM PEMINJAMAN
 
 Contoh Dashboard
 ![image](https://user-images.githubusercontent.com/52590303/145346413-a151a531-137f-4f4e-b044-177465dcf3ab.png)
+
+
+penambah semangat, 
+https://saweria.co/rezaLaravel � 👌
