@@ -212,6 +212,5 @@ responsive: {
     data:{!! json_encode($buku) !!}
   }]
 });
-console.log( {!! json_encode($buku) !!});
 </script>
 @endpush

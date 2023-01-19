@@ -15,7 +15,7 @@ class PengunjungRepository implements PengunjungRepositoryInterface{
         $data_table =  DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('keterangan', function($query){
-                if($query->is_boleh_pinjam == '0'){
+                if($query->is_boleh_pinjam == '1'){
                     $span = '<span class="badge badge-pill badge-success fz-11">Boleh Pinjam</span>';
                 }else {
                     $span = '<span class="badge badge-pill badge-danger fz-11">Tidak Boleh Pinjam</span>';
@@ -29,9 +29,7 @@ class PengunjungRepository implements PengunjungRepositoryInterface{
                 $aksi = '';
                     $aksi = "<a href=" . URL::to('master/pengunjung/'.$query->id.'/edit') . " class='btn btn-sm btn-primary btn-edit'>Edit</a>";
                     $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/hapus', ['data_id' =>$query->id]) . "' class='btn btn-danger btn-sm btn-delete'>Delete</a>";
-                    if($query->is_boleh_pinjam == '1'){
-                        $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/change_status_pengunjung', ['data_id' =>$query->id]) . "' class='btn btn-warning btn-sm btn-change-status-pengunjung'>Ubah Status Pengunjung</a>";
-                    }
+                    $aksi .= "<a href='javascript:;' data-route='" . URL::to('master/pengunjung/change_status_pengunjung', ['data_id' =>$query->id]) . "' class='btn btn-warning btn-sm btn-change-status-pengunjung'>Ubah Status Pengunjung</a>";
                 return $aksi;
             })
             ->rawColumns(['aksi'])
@@ -45,9 +43,10 @@ class PengunjungRepository implements PengunjungRepositoryInterface{
         $pengunjung = new Pengunjung();
         $pengunjung->is_boleh_pinjam = 0;
         $pengunjung->kode_pengunjung = Helper::kode_pengunjung();
-        $pengunjung->nama = $request->input('nama');
-        $pengunjung->alamat = $request->input('alamat');
-        $pengunjung->tanggal_lahir = $request->input('tanggal_lahir');
+        $pengunjung->nama            = $request->input('nama');
+        $pengunjung->alamat          = $request->input('alamat');
+        $pengunjung->tanggal_lahir   = $request->input('tanggal_lahir');
+        $pengunjung->no_telepon      = $request->input('no_telepon');
         $pengunjung->save();
 
         return $pengunjung;
@@ -72,7 +71,13 @@ class PengunjungRepository implements PengunjungRepositoryInterface{
 
     public function changeStatus($data_id)
     {
-        $query = Pengunjung::where('id', $data_id)->update(['is_boleh_pinjam' => '0']);
+        $query = Pengunjung::where('id', $data_id)->first();
+        if($query->is_boleh_pinjam == '1'){
+            $query->is_boleh_pinjam = 0;
+        }else {
+            $query->is_boleh_pinjam = 1;
+        }
+        $query->save();
         return $query;
     }
 }

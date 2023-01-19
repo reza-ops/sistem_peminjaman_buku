@@ -15,12 +15,17 @@ use PDF;
 
 class BukuController extends Controller
 {
-    private $route = 'master.buku.';
-    private $title = 'Buku';
-    private $header = 'Buku';
+    private $route  = 'master.buku.';
+    private $title  = 'Buku';
+    private $header = ' Master Buku';
+
+    public function __construct(BukuRepository $bukuRepository)
+    {
+        $this->mainRepo = $bukuRepository;
+        $this->middleware('auth');
+    }
 
     public function index(){
-        Helper::swal();
         $data = [
             'route'  => $this->route,
             'title'  => $this->title,
@@ -29,22 +34,21 @@ class BukuController extends Controller
         return view($this->route.'index', $data);
     }
 
-    public function getData(Request $request, BukuRepository $bukuRepository) {
-        return $bukuRepository->getDataTable($request);
+    public function getData(Request $request) {
+        return $this->mainRepo->getDataTable($request);
     }
 
     public function create(){
-        Helper::swal();
         $data = [
             'route'    => $this->route,
             'title'    => $this->title,
-            'header'   => $this->header,
+            'header'   => 'Create '. $this->header,
             'kategori' => Kategori::get(),
         ];
         return view($this->route.'create', $data);
     }
 
-    public function store(Request $request, BukuRepository $bukuRepository){
+    public function store(Request $request){
         $validasi = new ValidasiBukuRepository;
         $validasi = $validasi->validasiStore($request);
         if($validasi['status'] == false){
@@ -52,7 +56,7 @@ class BukuController extends Controller
             return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
         try{
-            $bukuRepository->store($request);
+            $this->mainRepo->store($request);
             $message = 'Berhasil';
             return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
         }catch(Exception $e){
@@ -61,19 +65,18 @@ class BukuController extends Controller
         }
     }
 
-    public function edit(BukuRepository $bukuRepository, $data_id){
-        Helper::swal();
+    public function edit($data_id){
         $data = [
             'route'    => $this->route,
             'title'    => $this->title,
-            'header'   => $this->header,
-            'data'     => $bukuRepository->getDataById($data_id),
+            'header'   => 'Update '.$this->header,
+            'data'     => $this->mainRepo->getDataById($data_id),
             'kategori' => Kategori::get(),
         ];
         return view($this->route.'update', $data);
     }
 
-    public function update(Request $request, Buku $buku, BukuRepository $bukuRepository){
+    public function update(Request $request, Buku $buku){
         $validasi = new ValidasiBukuRepository;
         $validasi = $validasi->validasiStore($request);
         if($validasi['status'] == false){
@@ -81,7 +84,7 @@ class BukuController extends Controller
             return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
         try{
-            $bukuRepository->update($request, $buku);
+            $this->mainRepo->update($request, $buku);
             $message = 'Berhasil';
             return redirect(route($this->route.'index'))->with('success', Helper::parsing_alert($message));
         }catch(Exception $e){
@@ -89,9 +92,9 @@ class BukuController extends Controller
             return redirect()->back()->with('error', Helper::parsing_alert($message));
         }
     }
-    public function destroy(BukuRepository $bukuRepository, $data_id){
+    public function destroy($data_id){
         try{
-            $bukuRepository->destroy($data_id);
+            $this->mainRepo->destroy($data_id);
             $message = 'Sukses';
             $response = [
                 'message' => $message,
@@ -108,10 +111,10 @@ class BukuController extends Controller
         }
     }
 
-    public function cetakBarcode(BukuRepository $bukuRepository,$data_id){
+    public function cetakBarcode($data_id){
         try{
             $pdf = PDF::loadview($this->route.'komponen.cetak_barcode',[
-                'buku'=>$bukuRepository->getDataById($data_id)
+                'buku'=>$this->mainRepo->getDataById($data_id)
             ]);
             return $pdf->stream();
         }catch(Exception $e){

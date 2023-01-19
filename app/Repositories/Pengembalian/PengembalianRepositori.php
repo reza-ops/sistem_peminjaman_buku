@@ -42,7 +42,7 @@ class PengembalianRepositori implements PengembalianRepositoriInterface{
                 'tanggal_pengembalian' => Carbon::now(),
             ];
             $set_data_pengunjung = [
-                'is_boleh_pinjam' => 1
+                'is_boleh_pinjam' => 0
             ];
             $update_data_pengunjung = Pengunjung::where('id', $transakasi->pengunjung_id)->update($set_data_pengunjung);
 

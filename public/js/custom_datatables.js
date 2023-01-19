@@ -61,7 +61,7 @@ var global = function () {
                 };
             });
         });
-        $(id_datatable).on('click', '.btn-change-status-pengunjung', function (e) {
+        $(id_datatable).on('click', '.btn-update-status-pengunjung', function (e) {
             e.preventDefault();
             var el = this;
             var route = $(this).attr("data-route");
@@ -181,58 +181,15 @@ var global = function () {
                 };
             });
         });
-        $(id_datatable).on('click', '.btn-musnahkan', function (e) {
+
+        $(id_datatable).on('click', '.btn-update-status-pengunjung', function (e) {
             e.preventDefault();
             var el = this;
             var route = $(this).attr("data-route");
-
+            console.log(route);
             Swal.fire({
-                title: "Apakah yakin memusnahkan darah ini ?",
-                text: "Lanjutkan untuk mengmemusnahkan",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Yes',
-            }).then((result) => {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                if (result.value) {
-                    $.ajax({
-                        url: route,
-                        type: 'get', // replaced from put
-                        dataType: "JSON",
-                        beforeSend: function () {
-                            $.blockUI();
-                        },
-                        success: function (response) {
-                            if (response.status == true) {
-                                $(id_datatable).DataTable().ajax.reload();
-                                swal.fire("Berhasil!", response.message, "success");
-                            } else {
-                                swal.fire("Gagal!", response.message, "error");
-                            }
-                            $.unblockUI();
-                        },
-                        error: function (xhr) {
-                            console.log(xhr.responseText);
-                        }
-                    });
-                };
-            });
-        });
-
-
-        $(id_datatable).on('click', '.btn-cancel', function (e) {
-            e.preventDefault();
-            var el = this;
-            var route = $(this).attr("data-route");
-
-            Swal.fire({
-                title: "Apakah yakin membatalkan order ini ?",
-                text: "Lanjutkan untuk membatalkan",
+                title: "Apakah yakin mengubah data ini ?",
+                text: "Lanjutkan untuk mengubah",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: '#DD6B55',
@@ -249,9 +206,9 @@ var global = function () {
                         success: function (response) {
                             if (response.status == true) {
                                 $(id_datatable).DataTable().ajax.reload();
-                                swal.fire("Berhasil", response.message, "success");
+                                swal.fire("Berhasil Mengubah!", response.message, "success");
                             } else {
-                                swal.fire("Gagal!", response.message, "error");
+                                swal.fire("Failed!", response.message, "error");
                             }
                             $.unblockUI();
                         },

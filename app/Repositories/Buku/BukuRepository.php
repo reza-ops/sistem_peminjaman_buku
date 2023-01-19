@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Buku;
 
-use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 use App\Contracts\Buku\BukuRepositoryInterface;
 use App\Helpers\Helper;
 use App\Models\Master\Buku;
@@ -56,6 +55,8 @@ class BukuRepository implements BukuRepositoryInterface
         $buku->nama           = $request->input('nama');
         $buku->kategori_id    = $request->input('kategori_id');
         $buku->biaya_per_hari = $request->input('biaya_per_hari');
+        $buku->penerbit = $request->input('penerbit');
+        $buku->tanggal_terbit = $request->input('tanggal_terbit');
         $buku->is_stock       = 0;
         $buku->save();
 

@@ -18,9 +18,9 @@ use Yajra\DataTables\DataTables;
 
 class PengunjungController extends Controller
 {
-    private $route = 'master.pengunjung.';
-    private $title = 'Pengunjung';
-    private $header = 'Pengunjung';
+    private $route  = 'master.pengunjung.';
+    private $title  = 'Pengunjung';
+    private $header = 'Master Pengunjung';
 
 
     public function index(){
@@ -40,9 +40,9 @@ class PengunjungController extends Controller
     public function create(){
         Helper::swal();
         $data = [
-            'route' => $this->route,
-            'title' => $this->title,
-            'header' => $this->header,
+            'route'  => $this->route,
+            'title'  => $this->title,
+            'header' => 'Create '. $this->header,
         ];
         return view($this->route.'create', $data);
     }
@@ -67,10 +67,10 @@ class PengunjungController extends Controller
     public function edit($id, PengunjungRepository $pengunjungRepository){
         Helper::swal();
         $data = [
-            'route' => $this->route,
-            'title' => $this->title,
-            'header' => $this->header,
-            'data' => $pengunjungRepository->getDataById($id),
+            'route'  => $this->route,
+            'title'  => $this->title,
+            'header' => 'Update '.$this->header,
+            'data'   => $pengunjungRepository->getDataById($id),
         ];
         return view($this->route.'update', $data);
     }

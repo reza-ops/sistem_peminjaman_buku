@@ -183,6 +183,8 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         // excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        // spatie
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

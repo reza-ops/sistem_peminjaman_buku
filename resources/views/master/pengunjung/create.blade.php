@@ -26,6 +26,10 @@
                 <label for="tanggal_lahir">Tanggal Lahir <span class="text-danger">*</span> </label>
                 <input type="date" name="tanggal_lahir" class="form-control" id="tanggal_lahir" >
             </div>
+            <div class="form-group">
+                <label for="no_telepon"> No Telepon <span class="text-danger">*</span> </label>
+                <input type="text" name="no_telepon" value="{{ old('no_telepon') }}" class="form-control" id="no_telepon" >
+            </div>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-success">Simpan</button>
@@ -38,4 +42,11 @@
 
 @push('js')
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    $('#tanggal_lahir').flatpickr({
+    });
+</script>
 @endpush

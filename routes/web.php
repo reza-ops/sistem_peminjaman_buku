@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Master\BukuController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\PengunjungController;
+use App\Http\Controllers\PengunjungBermasalahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapTransaksi\BelumKembaliController as RekapTransaksiBelumKembaliController;
 use App\Http\Controllers\RekapTransaksi\BerhasilController as RekapTransaksiBerhasilController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\RekapTransaksi\TerlambatController as RekapTransaksiTer
 use App\Http\Controllers\Transaksi\PeminjamanController;
 use App\Http\Controllers\Transaksi\PengembalianBermasalahController;
 use App\Http\Controllers\Transaksi\PengembalianController;
+use App\Http\Controllers\UserManagement\RoleController;
 use App\Models\Master\Pengunjung;
 use App\Models\Transaksi\Peminjaman;
 use Illuminate\Support\Facades\Route;
@@ -39,12 +41,25 @@ Route::post('regisrasi_action', [LoginController::class, 'registrasi'])->name('r
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 
+Route::post('send_message', [DashboardController::class, 'sendMessage'])->name('send_message');
+Route::get('download_template_excel', [DashboardController::class, 'downloadTemplateExcel'])->name('download_template_excel');
+
 Route::resource('profile', ProfileController::class);
 
 Route::group([
-    'prefix'    => 'master',
-    'as'        => 'master.',
-    'auth:sanctum'=> 'verified',
+    'prefix'       => 'user-management',
+    'as'           => 'user_management.',
+    'auth:sanctum' => 'verified',
+],  function () {
+    // route roles
+    Route::resource('role', RoleController::class)->except('destroy','show');
+    Route::get('role/get_data' ,[RoleController::class,'getData']);
+
+});
+Route::group([
+    'prefix'       => 'master',
+    'as'           => 'master.',
+    'middleware'   => ['auth'],
 ],  function () {
     // route kategori
     Route::resource('kategori', KategoriController::class)->except('destroy','show');
@@ -66,9 +81,10 @@ Route::group([
 });
 
 Route::group([
-    'prefix'    => 'transaksi',
-    'as'        => 'transaksi.',
-    'auth:sanctum'=> 'verified',
+    'prefix'       => 'transaksi',
+    'as'           => 'transaksi.',
+    'auth:sanctum' => 'verified',
+    'middleware'   => ['auth'],
 ],  function ()  {
     Route::resource('peminjaman', PeminjamanController::class)->only('index','store');
     Route::group([
@@ -98,9 +114,9 @@ Route::group([
 
 });
 Route::group([
-    'prefix'    => 'daftar_transaksi',
-    'as'        => 'daftar_transaksi.',
-    'auth:sanctum'=> 'verified',
+    'prefix'     => 'daftar_transaksi',
+    'as'         => 'daftar_transaksi.',
+    'middleware' => ['auth'],
     ],  function ()  {
         Route::resource('berhasil', BerhasilController::class)->only('index');
         Route::get('berhasil/get_data' ,[BerhasilController::class,'getData']);
@@ -115,13 +131,23 @@ Route::group([
         Route::get('belum_kembali/{data_id}/detail' ,[BelumKembaliController::class,'detail']);
 });
 Route::group([
-    'prefix'    => 'rekap_transaksi',
-    'as'        => 'rekap_transaksi.',
-    'auth:sanctum'=> 'verified',
+    'prefix'     => 'rekap_transaksi',
+    'as'         => 'rekap_transaksi.',
+    'middleware' => ['auth'],
     ],  function ()  {
         Route::resource('berhasil', RekapTransaksiBerhasilController::class)->only('index','store');
 
         Route::resource('belum_kembali', RekapTransaksiBelumKembaliController::class)->only('index','store');
 
         Route::resource('terlambat', RekapTransaksiTerlambatController::class)->only('index','store');
+});
+Route::resource('pengunjung_bermasalah', PengunjungBermasalahController::class)->only('index');
+Route::group([
+    'prefix'     => 'pengunjung_bermasalah',
+    'as'         => 'pengunjung_bermasalah.',
+    'middleware' => ['auth'],
+], function () {
+    Route::get('get_data' ,[PengunjungBermasalahController::class,'getData']);
+    Route::get('update/{data_id}' ,[PengunjungBermasalahController::class,'update']);
+    Route::get('cetak_excel' ,[PengunjungBermasalahController::class,'cetakExcel'])->name('cetak_excel');
 });

@@ -15,9 +15,24 @@ class Buku extends Model
         'biaya_per_hari',
         'kode_buku',
         'is_stock',
+        'penerbit',
+        'tanggal_terbit',
     ];
 
     public function kategori(){
-        return $this->belongsTo(Kategori::class,'kategori_id', 'id');
+        return $this->hasOne(Kategori::class,'id', 'kategori_id')->withDefault([
+            'nama'=> 'Default reza'
+        ]);
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        self::creating(function ($model){
+            Kategori::create([
+                'nama'      => $model->nama,
+                'deskripsi' => $model->kode_buku,
+            ]);
+        });
     }
 }

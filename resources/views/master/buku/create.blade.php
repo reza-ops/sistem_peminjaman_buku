@@ -30,6 +30,14 @@
                 <label for="biaya_per_hari"> Biaya Per Hari <span class="text-danger">*</span> </label>
                 <input type="number" name="biaya_per_hari" value="{{ old('biaya_per_hari') }}" class="form-control" id="biaya_per_hari" >
             </div>
+            <div class="form-group">
+                <label for="penerbit"> Penerbit <span class="text-danger">*</span> </label>
+                <input type="text" name="penerbit" value="{{ old('penerbit') }}" class="form-control" id="penerbit" >
+            </div>
+            <div class="form-group">
+                <label for="tanggal_terbit">Tanggal Terbit <span class="text-danger">*</span> </label>
+                <input type="text" name="tanggal_terbit" value="{{ old('tanggal_terbit') }}" class="form-control" id="tanggal_terbit" >
+            </div>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-success">Simpan</button>
@@ -41,4 +49,12 @@
 @endsection
 
 @push('js')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    $('#tanggal_terbit').flatpickr({
+        dateFormat: "Y-m-d"
+    });
+</script>
 @endpush

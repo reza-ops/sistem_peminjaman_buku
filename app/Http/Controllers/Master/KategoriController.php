@@ -41,7 +41,6 @@ class KategoriController extends Controller
     }
 
     public function store(Request $request,KategoriRepository $kategoriRepository){
-
         $validasi = new ValidasiRepository;
         $validasi = $validasi->validasiStore($request);
         if($validasi['status'] == false){
