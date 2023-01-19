@@ -34,3 +34,11 @@ Cara Untuk Install SISTEM PEMINJAMAN
 7. masuk ke aplikasi
 8. register
 9. masuk ke dashboard
+
+
+Contoh Dashboard
+![image](https://user-images.githubusercontent.com/52590303/145346413-a151a531-137f-4f4e-b044-177465dcf3ab.png)
+
+
+penambah semangat, 
+https://saweria.co/rezaLaravel � 👌
