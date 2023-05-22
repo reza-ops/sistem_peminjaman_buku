@@ -17,12 +17,14 @@
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^8.0",
         "realrashid/sweet-alert": "^3.1",
+        "spatie/laravel-permission": "*",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "jason-guru/laravel-make-repository": "^0.0.3",
+        "laravel/dusk": "^6.25",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
